@@ -1,0 +1,77 @@
+# CS3411 - Project 2: Tar Archiver 
+
+## Description
+This project implements a simple tar archiver tool (`ctar`) and a corresponding untar tool (`utar`). The archiver allows for appending files to an archive, deleting files from an archive, and extracting files from the archive.
+
+## Requirements
+- C Compiler (gcc)
+- Linux operating system, on campus lab computers
+- Make
+
+## Compilation
+To compile the project, use the provided Makefile. Simply run:
+```bash
+make
+```
+
+## Usage
+
+### Creating an Archive
+To create a new archive and append files to it:
+```bash
+./ctar -a <archive-name> <file1> <file2> ...
+```
+
+### Deleting from an Archive
+To delete files from an existing archive:
+```bash
+./ctar -d <archive-name> <file1> <file2> ...
+```
+
+### Extracting from an Archive
+To extract all files from an archive:
+```bash
+./utar <archive-name>
+```
+
+## Testing
+
+A `TESTS` folder is provided with sample text files (`file1.txt`, `file2.txt`) and an empty archive (`archive.tar`). You can run the following commands to test the functionality:
+
+### Create Empty Archive:
+Create an empty archive. This verifies that the archive file is properly created with a valid header.
+```bash
+./ctar -a test_archive.tar
+```
+
+### Append Files
+Append files to the archive. Verify that the files are properly stored and the header is updated.
+```bash
+./ctar -a test_archive.tar file1.txt file2.txt
+```
+
+### Deleting Files from Archive
+Delete a file from the archive. Verify that `file1.txt` is marked as deleted in the header but the content remains intact.
+```bash
+./ctar -d test_archive.tar file1.txt
+```
+
+### Extract Files from Archive
+Extract the files from the archive. Verify that the extracted files have the correct content and permissions.
+```bash
+./utar test_archive.tar
+```
+
+### Error Handling for Non-Existing File
+Test the program's error handling. The program should return an appropriate error without modifying the archive.
+```bash
+./ctar -a test_archive.tar non_existing_file.txt
+```
+
+## Known Issues
+- File overwrite handling during extraction is limited.
+
+## Author
+Adam Fenjiro
+
+

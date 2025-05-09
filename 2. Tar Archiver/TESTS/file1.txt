@@ -1,0 +1,4 @@
+This is the first test file used for testing the ctar and utar functionality.
+It contains multiple lines of text to ensure proper archival and extraction.
+The quick brown fox jumps over the lazy dog.
+End of file 1 content.

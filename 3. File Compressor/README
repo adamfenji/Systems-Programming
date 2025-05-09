@@ -1,0 +1,185 @@
+# CS3411 - Program 3: File Compression and Decompression
+
+## Overview
+
+This project implements a compression (`czy`) and decompression (`dzy`) algorithm for files using a bitwise encoding scheme. The encoder reads a byte stream, compares each byte to the previous 8 bytes, and encodes it based on its uniqueness or frequency in the recent bytes. The decompressor reverses this process to retrieve the original data.
+
+### Files Included
+- `bitsy.c` and `bitsy.h`: Handles the bitwise read/write functions.
+- `czy.c`: Implements the compression algorithm.
+- `dzy.c`: Implements the decompression algorithm.
+- `Makefile`: Provides commands for compiling, cleaning, and packaging the program.
+- `README.md`: Contains instructions, test results, and observations.
+
+
+### Running the Programs
+
+1. **Compression**:
+   ```bash
+   ./czy < input.txt > output.encoded
+   ```
+
+2. **Decompression**:
+   ```bash
+   ./dzy < output.encoded > output_decoded.txt
+   ```
+
+3. **Verification**:
+   ```bash
+   diff input.txt output_decoded.txt
+   ```
+
+## Testing and Results
+
+### Test Files
+
+1. **Text File Test**:
+   - **Input**: `test1.txt` with content: `"simple test text for compression"`
+   - **Commands**:
+   ```bash
+   echo "simple test text for compression" > test1.txt
+   ./czy < test1.txt > test1.encoded
+   ./dzy < test1.encoded > test1_decoded.txt
+   diff test1.txt test1_decoded.txt 
+   ```
+   - **Expected Result**: The `diff` between `test1.txt` and `test1_decoded.txt` should show no differences.
+
+2. **Repeated Characters Test**:
+   - **Input**: `test2.txt` with content: `"aaaaabbbbbccccc"`
+   - **Commands**:
+   ```bash
+   echo "aaaaabbbbbccccc" > test2.txt
+   ./czy < test2.txt > test2.encoded
+   ./dzy < test2.encoded > test2_decoded.txt
+   diff test2.txt test2_decoded.txt
+   ```
+   - **Expected Result**: The `diff` between `test2.txt` and `test2_decoded.txt` should show no differences.
+
+3. **Binary File Test**:
+   - **Input**: `test3.bin` with content: `\x01\x02\x03\x01\x02\x03`
+   - **Commands**:
+   ```bash
+   printf '\x01\x02\x03\x01\x02\x03' > test3.bin
+   ./czy < test3.bin > test3.encoded
+   ./dzy < test3.encoded > test3_decoded.bin
+   diff test3.bin test3_decoded.bin
+   ```
+   - **Expected Result**: The `diff` between `test3.bin` and `test3_decoded.bin` should show no differences.
+
+4. **Large Text Files Test**:
+   - **Input**: `large_text_test.txt`
+   - **Commands**:
+   ```bash
+   cp czy.c large_text_test.txt
+   ./czy < large_text_test.txt > large_text_test.encoded
+   ./dzy < large_text_test.encoded > large_text_test_decoded.txt
+   diff large_text_test.txt large_text_test_decoded.txt
+   ```
+   - **Expected Result**: The `diff` between `large_text_test.txt` and `large_text_test_decoded.txt` should show no differences.
+
+5. **Mixed Character Test**:
+   - **Input**: `mixed_chars_test.txt` with content: `"Hello, World! 1234\n\tSpecial chars: @$%^&*()`
+   - **Commands**:
+   ```bash
+   echo "Hello, World! 1234\n\tSpecial chars: @$%^&*()" > mixed_chars_test.txt
+   ./czy < mixed_chars_test.txt > mixed_chars_test.encoded
+   ./dzy < mixed_chars_test.encoded > mixed_chars_test_decoded.txt
+   diff mixed_chars_test.txt mixed_chars_test_decoded.txt
+   ```
+   - **Expected Result**: The `diff` between `mixed_chars_test.txt` and `mixed_chars_test_decoded.txt` should show no differences.
+
+### Compression Ratios
+
+1. **Commands ran**:
+```bash
+[afenjiro@colossus P3]$ make all
+gcc -c -Wall bitsy.c
+gcc -Wall -o czy bitsy.o czy.c
+gcc -Wall -o dzy bitsy.o dzy.c
+
+
+[afenjiro@colossus P3]$ echo "simple test text for compression" > test1.txt
+[afenjiro@colossus P3]$ ls -l test1.txt | awk '{print $5}'
+33
+[afenjiro@colossus P3]$ ./czy < test1.txt > test1.encoded
+[afenjiro@colossus P3]$ ls -l test1.encoded | awk '{print $5}'
+32
+[afenjiro@colossus P3]$ ./dzy < test1.encoded > test1_decoded.txt
+[afenjiro@colossus P3]$ diff test1.txt test1_decoded.txt
+[afenjiro@colossus P3]$ echo "aaaaabbbbbccccc" > test2.txt
+[afenjiro@colossus P3]$ ls -l test2.txt | awk '{print $5}'
+16
+[afenjiro@colossus P3]$ ./czy < test2.txt > test2.encoded
+[afenjiro@colossus P3]$ ls -l test2.encoded | awk '{print $5}'
+8
+[afenjiro@colossus P3]$ ./dzy < test2.encoded > test2_decoded.txt
+[afenjiro@colossus P3]$ diff test2.txt test2_decoded.txt
+[afenjiro@colossus P3]$ printf '\x01\x02\x03\x01\x02\x03' > test3.bin
+[afenjiro@colossus P3]$ ls -l test3.bin | awk '{print $5}'
+6
+[afenjiro@colossus P3]$ ./czy < test3.bin > test3.encoded
+[afenjiro@colossus P3]$ ls -l test3.encoded | awk '{print $5}'
+6
+[afenjiro@colossus P3]$ ./dzy < test3.encoded > test3_decoded.bin
+[afenjiro@colossus P3]$ diff test3.bin test3_decoded.bin
+[afenjiro@colossus P3]$ gzip -c test1.txt > test1.txt.gz
+[afenjiro@colossus P3]$ ls -l test1.txt.gz | awk '{print $5}'
+61
+[afenjiro@colossus P3]$ gzip -c test2.txt > test2.txt.gz
+[afenjiro@colossus P3]$ ls -l test2.txt.gz | awk '{print $5}'
+39
+[afenjiro@colossus P3]$ gzip -c test3.bin > test3.bin.gz
+[afenjiro@colossus P3]$ ls -l test3.bin.gz | awk '{print $5}'
+36
+
+
+[afenjiro@colossus P3]$ ls -l czy | awk '{print $5}'
+17992
+[afenjiro@colossus P3]$ ls -l dzy | awk '{print $5}'
+17960
+[afenjiro@colossus P3]$ ls -l bitsy.o | awk '{print $5}'
+2800
+[afenjiro@colossus P3]$ ./czy < czy > czy.encoded
+[afenjiro@colossus P3]$ ./czy < dzy > dzy.encoded
+[afenjiro@colossus P3]$ ./czy < bitsy.o > bitsy_encoded.o
+[afenjiro@colossus P3]$ ls -l czy.encoded | awk '{print $5}'
+6512
+[afenjiro@colossus P3]$ ls -l dzy.encoded | awk '{print $5}'
+6266
+[afenjiro@colossus P3]$ ls -l bitsy_encoded.o | awk '{print $5}'
+1356
+[afenjiro@colossus P3]$ gzip -c czy > czy.gz
+[afenjiro@colossus P3]$ gzip -c dzy > dzy.gz
+[afenjiro@colossus P3]$ gzip -c bitsy.o > bitsy.o.gz
+[afenjiro@colossus P3]$ ls -l czy.gz | awk '{print $5}'
+3616
+[afenjiro@colossus P3]$ ls -l dzy.gz | awk '{print $5}'
+3489
+[afenjiro@colossus P3]$ ls -l bitsy.o.gz | awk '{print $5}'
+947
+```
+
+
+2. **Ratios table**:
+
+**Formula Used**:  
+   - Compression Ratio = Original Size / Encoded Size
+   - Gzip Compression Ratio = Original Size / Gzip Size
+
+| File               | Original Size (bytes) | Encoded Size (bytes) | Compression Ratio | Gzip Size (bytes) | Gzip Compression Ratio |
+|--------------------|-----------------------|-----------------------|-------------------|-------------------|------------------------|
+| `czy`     | 17992                 | 6512                 | 2.76             | 3616             | 4.98                   |
+| `dzy`     | 17960                 | 6266                 | 2.87             | 3489             | 5.15                   |
+| `bitsy.o` | 2800                  | 1356                 | 2.06             | 947              | 2.96                   |
+| `test1.txt`        | 33                    | 32                   | 1.03             | 61               | 0.54                   |
+| `test2.txt`        | 16                    | 8                    | 2.00             | 39               | 0.41                   |
+| `test3.bin`        | 6                     | 6                    | 1.00             | 36               | 0.17                   |
+
+### Observations
+
+- **Executable Compression**: The `czy` and `dzy` achieved high compression ratios with both `czy` encoding and gzip, with gzip outperforming in all cases.
+
+- **Summary**: `czy` encoding generally performs well for larger, repetitive files, but gzip tends to achieve higher compression ratios overall due to its sophisticated handling of patterns and file structures.
+
+
+

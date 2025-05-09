@@ -1,0 +1,5 @@
+This is the second test file. It is also used to verify that the tar archiver can handle multiple files.
+Testing lines for file 2:
+- Line one
+- Line two
+- Line three
