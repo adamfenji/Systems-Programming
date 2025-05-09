@@ -9,11 +9,11 @@ All projects were coded from scratch based on the textbooks:
 
 | #  | **Topic**                      | **Description** |
 |----|-------------------------------|-----------------|
-| 1  | **Custom Memory Allocator – hmalloc** | Built a simplified `malloc`/`free` system using `sbrk()` and a single free list. Implemented `hmalloc`, `hfree`, `hcalloc`, and a `traverse` function to debug memory usage. |
-| 2  | **Tar Archiver (ctar / utar)** | Developed a file archiver (`ctar`) and extractor (`utar`) using custom header blocks, supporting append/delete/extract operations on regular files, with strict validation using `lstat()` and no `stdio.h`. |
-| 3  | **Bit-level File Compressor (czy/dzy)** | Created a symbol stream compressor (`czy`) and decompressor (`dzy`) using 4- and 9-bit encoding schemes with only `read()`/`write()` syscalls and bit-level abstractions. |
-| 4  | **System Call Script Logger (hscript)** | Implemented a script-like utility to log a program’s I/O activity into files `0`, `1`, and `2` (stdin, stdout, stderr) using **pipes**, **select()**, and **non-blocking I/O**. |
-| 5  | **Mini RPC Framework (client/server)** | Designed a Remote Procedure Call system enabling `rp_open`, `rp_read`, `rp_write`, `rp_seek`, and `rp_close` across networked clients and servers via **TCP sockets**, **marshalling**, and **forked server handlers**. |
+| 1  | [**Custom Memory Allocator – hmalloc**](1.%20Husky%20malloc) | Built a simplified `malloc`/`free` system using `sbrk()` and a single free list. Implemented `hmalloc`, `hfree`, `hcalloc`, and a `traverse` function to debug memory usage. |
+| 2  | [**Tar Archiver (ctar / utar)**](2.%20Tar%20Archiver) | Developed a file archiver (`ctar`) and extractor (`utar`) using custom header blocks, supporting append/delete/extract operations on regular files, with strict validation using `lstat()` and no `stdio.h`. |
+| 3  | [**Bit-level File Compressor (czy/dzy)**](3.%20File%20Compressor) | Created a symbol stream compressor (`czy`) and decompressor (`dzy`) using 4- and 9-bit encoding schemes with only `read()`/`write()` syscalls and bit-level abstractions. |
+| 4  | [**System Call Script Logger (hscript)**](4.%20System%20Call%20Script%20Logger) | Implemented a script-like utility to log a program’s I/O activity into files `0`, `1`, and `2` (stdin, stdout, stderr) using **pipes**, **select()**, and **non-blocking I/O**. |
+| 5  | [**Mini RPC Framework (client/server)**](5.%20RPC%20Framework) | Designed a Remote Procedure Call system enabling `rp_open`, `rp_read`, `rp_write`, `rp_seek`, and `rp_close` across networked clients and servers via **TCP sockets**, **marshalling**, and **forked server handlers**. |
 
 ## 🧠 **Key Learnings**
 - Developed **low-level systems software** in **pure C** without relying on standard libraries (`stdio.h` not allowed)  
